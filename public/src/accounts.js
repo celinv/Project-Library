@@ -35,15 +35,16 @@ author object is nested inside of it.
 */
 function getBooksPossessedByAccount(account, books, authors) {
   let booksBorrowed = [];
-  for (book in books) {
-    let borrowTransactions = books[book].borrows;
-    for (transaction in borrowTransactions) {
+  for (const book in books) {
+    let bookElement = books[book];
+    let borrowTransactions = bookElement.borrows;
+    for (const transaction in borrowTransactions) {
       let borrowTransaction = borrowTransactions[transaction];
       if (borrowTransaction.id === account.id && borrowTransaction.returned === false) {
-        books[book].author = authors.find(
-          (author) => author.id === books[book].authorId
+        bookElement.author = authors.find(
+          (author) => author.id === bookElement.authorId
         );
-        booksBorrowed.push(books[book]); 
+        booksBorrowed.push(bookElement); 
       }
     }
   }

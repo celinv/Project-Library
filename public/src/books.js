@@ -1,5 +1,3 @@
-const { findAccountById } = require("./accounts");
-
 /*
 @param authors array, number value ID of a single author object
 @return author object with matching id given
@@ -9,7 +7,6 @@ function findAuthorById(authors, id) {
 }
 
 /*
-DONE
 @param the books array, a string id of a single book object
 @return the books object with the matching id parameter
 */
@@ -27,12 +24,13 @@ function partitionBooksByBorrowedStatus(books) {
   let notReturnedBooks = [];
 
   for (let book in books) {
-    let status = books[book].borrows[0].returned;
+    let bookElement = books[book];
+    let status = bookElement.borrows[0].returned;
     if (status === true) {
-      returnBooks.push(books[book]);
+      returnBooks.push(bookElement);
     }
     else {
-      notReturnedBooks.push(books[book]);
+      notReturnedBooks.push(bookElement);
     }
   }
   return [notReturnedBooks, returnBooks];
@@ -46,9 +44,9 @@ array. However, each account object should include the `returned` entry from
 the corresponding transaction object in the `borrows` array.
 */
 function getBorrowersForBook(book, accounts) {
-  return book.borrows.map((bookTransaction) => {
+  return book.borrows.map((borrowed) => {
     return {
-      ...bookTransaction, ...accounts.find((account) => account.id === bookTransaction.id)
+      ...borrowed, ...accounts.find((account) => account.id === borrowed.id)
     }
   }).slice(0,10);
 }

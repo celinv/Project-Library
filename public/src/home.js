@@ -24,6 +24,14 @@ function getBooksBorrowedCount(books) {
 }
 
 /*
+@param array of objects
+@return given array of objects but sorted by count and kept to five objects or fewer
+*/
+function getTopFive(array) {
+  return array.sort((indexA, indexB) => indexA.count < indexB.count ? 1 : -1).slice(0,5);
+}
+
+/*
 @param the books array
 @return an ordered array of five or fewer objects listing the name of the genre and 
 the amount of times the genre occurs
@@ -39,11 +47,12 @@ function getMostCommonGenres(books) {
     }
     return acc
   }, {});
+  
   const genreArray = [];
-  for (genre in bookGenre) {
+  for (const genre in bookGenre) {
     genreArray.push({name: genre, count: bookGenre[genre]});
   }
-  return genreArray.sort((genreA, genreB) => genreA.count < genreB.count ? 1 : -1).slice(0,5);
+  return getTopFive(genreArray);
 }
 
 /*
@@ -53,11 +62,11 @@ as indicated by the 'borrows' property in the book object
 */
 function getMostPopularBooks(books) {
   const borrowsArray = [];
-  for (book in books) {
+  for (const book in books) {
     borrowsArray.push({name: books[book].title, count: books[book].borrows.length});
   }
 
-  return borrowsArray.sort((bookA, bookB) => bookA.count < bookB.count ? 1 : -1).slice(0,5);
+  return getTopFive(borrowsArray);
 }
 
 /*
@@ -82,7 +91,7 @@ function getMostPopularAuthors(books, authors) {
    return {name: `${author.name.first} ${author.name.last}`, count: countByAuthor[authorId]};
  });
 
- return fullNameAuthor.sort((authorA, authorB) => authorA.count < authorB.count ? 1 : -1).slice(0,5);
+ return getTopFive(fullNameAuthor);
 }
 
 module.exports = {
